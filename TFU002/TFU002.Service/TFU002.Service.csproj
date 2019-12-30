@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="5.0.0-preview4" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads.Reactive" Version="5.0.0-preview4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.0" />
+    <PackageReference Include="Sharp7" Version="1.0.50" />
+    <PackageReference Include="Sharp7.Rx" Version="1.0.37" />
   </ItemGroup>
 </Project>
