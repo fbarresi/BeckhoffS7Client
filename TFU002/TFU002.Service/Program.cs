@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using TFU002.Interfaces.Services;
+using TFU002.Logic.Services;
 
 namespace TFU002.Service
 {
@@ -30,6 +32,7 @@ namespace TFU002.Service
                 .ConfigureLogging(logging => logging.AddSerilog())
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton<ISettingsProvider, SettingsProvider>();
                     services.AddHostedService<Worker>();
                 });
     }
