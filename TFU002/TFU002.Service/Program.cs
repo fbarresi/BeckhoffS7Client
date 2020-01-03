@@ -33,6 +33,7 @@ namespace TFU002.Service
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<ISettingsProvider, SettingsProvider>();
+                    services.AddSingleton<IDirectoryProvider, DirectoryProvider>();
                     services.AddHostedService<Worker>();
                 });
     }

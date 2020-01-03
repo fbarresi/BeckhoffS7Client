@@ -65,25 +65,27 @@ namespace TFU002.Service
             var directory = Directory.GetParent(assemblyLocation);
             logger.LogInformation($"Loading interfaces from path: {directory}");
             
-            var toInit = GetInterfacesThatImplements<IInitializable>(typeof(IInitializable), typeof(ServiceBase));
+            var toInit = GetExtendedInterfacesOf<IInitializable>(typeof(ServiceBase));
             foreach (var type in toInit)
             {
-                logger.LogInformation($"Staring initialization for {type.Name}...");
-                try
+                foreach (var o in serviceProvider.GetServices(type))
                 {
-                    var service = (IInitializable)serviceProvider.GetService(type);
-                    var result = await service.Initialize();
-                    logger.LogInformation($"Initialization of {type.Name} completed with result: {result}");
+                    logger.LogInformation($"Staring initialization for {type.Name}...");
+                    try
+                    {
+                        var service = (IInitializable) o;
+                        var result = await service.Initialize();
+                        logger.LogInformation($"Initialization of {type.Name} completed with result: {result}");
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError(e, $"Error while initializing service {type.Name}");
+                    }
                 }
-                catch (Exception e)
-                {
-                    logger.LogError(e, $"Error while initializing service {type.Name}");
-                }
-                
             }
         }
 
-        public Type[] GetInterfacesThatImplements<T>(params Type[] exclude)
+        public Type[] GetExtendedInterfacesOf<T>(params Type[] exclude)
         {
             return AppDomain.CurrentDomain
                 .GetAssemblies()
@@ -91,7 +93,7 @@ namespace TFU002.Service
                 .Where(t => typeof(T).IsAssignableFrom(t))
                 .SelectMany(t => t.GetInterfaces())
                 .Except(exclude)
-                .Except(new []{typeof(IDisposable)})
+                .Except(new []{typeof(IDisposable), typeof(T)})
                 .ToArray();
         }
 
