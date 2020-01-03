@@ -2,6 +2,6 @@
 {
     public interface IDirectoryProvider
     {
-        string AssemblyDirectory { get; set; }
+        string AssemblyDirectory { get; }
     }
 }

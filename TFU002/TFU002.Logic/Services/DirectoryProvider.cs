@@ -7,21 +7,19 @@ using TFU002.Logic.Basics;
 
 namespace TFU002.Logic.Services
 {
-    public class DirectoryProvider : ServiceBase, IDirectoryProvider
+    public class DirectoryProvider : IDirectoryProvider
     {
-        public DirectoryProvider(ILogger<DirectoryProvider> logger) : base(logger)
-        {
-        }
+        private readonly ILogger<DirectoryProvider> logger;
 
-        public override Task<bool> Initialize()
+        public DirectoryProvider(ILogger<DirectoryProvider> logger)
         {
+            this.logger = logger;
             var assemblyLocation = Assembly.GetAssembly(this.GetType()).Location;
             var currentDirectory = Directory.GetParent(assemblyLocation);
             AssemblyDirectory = currentDirectory.FullName;
-            Logger.LogInformation($"Actual path: {currentDirectory}");
-            return base.Initialize();
+            logger.LogInformation($"Actual path: {currentDirectory}");
         }
 
-        public string AssemblyDirectory { get; set; }
+        public string AssemblyDirectory { get; }
     }
 }

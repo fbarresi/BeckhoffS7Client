@@ -32,6 +32,7 @@ namespace TFU002.Service
                 .ConfigureLogging(logging => logging.AddSerilog())
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton<IPlcProvider, PlcProvider>();
                     services.AddSingleton<ISettingsProvider, SettingsProvider>();
                     services.AddSingleton<IDirectoryProvider, DirectoryProvider>();
                     services.AddHostedService<Worker>();

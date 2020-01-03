@@ -4,4 +4,8 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Sharp7.Rx" Version="1.0.37" />
+    </ItemGroup>
+
 </Project>

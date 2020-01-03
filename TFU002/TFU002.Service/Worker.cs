@@ -42,13 +42,11 @@ namespace TFU002.Service
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-
-            //Load Settings
-            // var initializables = serviceProvider.GetServices<ISettingsProvider>();
             await InitializeAllServices(serviceProvider);
-            var settings = settingsProvider.Settings;
-            //Try Connect with all PLCs
 
+            //Load Settings and
+            //Try Connect with all PLCs
+            
             await base.StartAsync(cancellationToken);
         }
 
@@ -61,10 +59,6 @@ namespace TFU002.Service
 
         private async Task InitializeAllServices(IServiceProvider serviceProvider)
         {
-            var assemblyLocation = Assembly.GetAssembly(this.GetType()).Location;
-            var directory = Directory.GetParent(assemblyLocation);
-            logger.LogInformation($"Loading interfaces from path: {directory}");
-            
             var toInit = GetExtendedInterfacesOf<IInitializable>(typeof(ServiceBase));
             foreach (var type in toInit)
             {
