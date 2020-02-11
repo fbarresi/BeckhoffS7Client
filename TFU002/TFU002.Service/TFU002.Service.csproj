@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beckhoff.TwinCAT.Ads.AdsRouterConsole" Version="5.0.0-preview4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.0" />
     <PackageReference Include="Serilog" Version="2.9.0" />
@@ -17,11 +16,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFU002.Logic\TFU002.Logic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="StaticRoutes.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

@@ -32,10 +32,10 @@ namespace TFU002.Logic.Services
 
         private void InitializeBeckhoff(BeckhoffSettings setting)
         {
-            logger.LogInformation($"Connecting with Beckhoff at {setting.AmsNetId}:{setting.Port}...");
+            logger.LogInformation($"Connecting with Beckhoff at '{setting.AmsNetId}:{setting.Port}'...");
             if (string.IsNullOrEmpty(setting.AmsNetId))
             {
-                Client.Connect(AmsNetId.Local, setting.Port); //Connect ads locally
+                Client.Connect(setting.Port); //Connect ads locally
             }
             else
             {

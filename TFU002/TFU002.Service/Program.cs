@@ -8,8 +8,6 @@ using Serilog;
 using Serilog.Events;
 using TFU002.Interfaces.Services;
 using TFU002.Logic.Services;
-using TwinCAT.Ads.AdsRouterService;
-using TwinCAT.Ads.TcpRouter;
 
 namespace TFU002.Service
 {
@@ -34,21 +32,11 @@ namespace TFU002.Service
                 .ConfigureLogging(logging => logging.AddSerilog())
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<RouterService>();
                     services.AddSingleton<IBeckhoffService, BeckhoffService>();
                     services.AddSingleton<IPlcProvider, PlcProvider>();
                     services.AddSingleton<ISettingsProvider, SettingsProvider>();
                     services.AddSingleton<IDirectoryProvider, DirectoryProvider>();
                     services.AddHostedService<Worker>();
-                })
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    // Uncomment to overwrite configuration
-                    //config.Sources.Clear(); // Clear all default config sources 
-                    //config.AddEnvironmentVariables("AmsRouter"); // Use Environment variables
-                    //config.AddCommandLine(args); // Use Command Line
-                    //config.AddJsonFile("appSettings.json"); // Use Appsettings
-                    config.AddStaticRoutesXmlConfiguration(); // Overriding settings with StaticRoutes.Xml 
                 })
         ;
     }
