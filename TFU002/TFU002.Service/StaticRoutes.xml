@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\TwinCAT3\Config\TcConfig.xsd">
+    <Local>
+        <Name>MyLocalSystem</Name>
+        <NetId>10.30.2.123.1.1</NetId>
+        <TcpPort>48899</TcpPort>
+    </Local>
+    <RemoteConnections>
+        <Route>
+            <Name>MyRemoteSystem</Name>
+            <Address>127.0.0.1</Address>
+            <NetId>10.30.2.123.1.1</NetId>
+            <Type>TCP_IP</Type>
+        </Route>
+    </RemoteConnections>
+</TcConfig>

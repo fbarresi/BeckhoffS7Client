@@ -32,9 +32,10 @@ namespace TFU002.Logic.Services
 
         private void InitializeBeckhoff(BeckhoffSettings setting)
         {
+            logger.LogInformation($"Connecting with Beckhoff at {setting.AmsNetId}:{setting.Port}...");
             if (string.IsNullOrEmpty(setting.AmsNetId))
             {
-                Client.Connect(setting.Port); //Connect ads locally
+                Client.Connect(AmsNetId.Local, setting.Port); //Connect ads locally
             }
             else
             {
@@ -44,7 +45,14 @@ namespace TFU002.Logic.Services
 
         public override async Task<bool> Initialize()
         {
-            InitializeBeckhoff(settingsProvider.Settings.BeckhoffSettings);
+            try
+            {
+                InitializeBeckhoff(settingsProvider.Settings.BeckhoffSettings);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error while initializing beckhoff");
+            }
             
             Observable.FromEventPattern<ConnectionStateChangedEventArgs>(ev => Client.ConnectionStateChanged += ev,
                                                                          ev => Client.ConnectionStateChanged -= ev)
