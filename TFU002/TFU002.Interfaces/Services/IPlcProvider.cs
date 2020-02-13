@@ -5,6 +5,7 @@ namespace TFU002.Interfaces.Services
 {
     public interface IPlcProvider
     {
-        Dictionary<string, IPlc> Plcs { get; }
+        IPlc GetPlc();
+        IPlc GetPlc(string name);
     }
 }

@@ -9,6 +9,6 @@ namespace TFU002.Interfaces.Services
     {
         IObservable<ConnectionState> ConnectionState { get; }
         AdsClient Client { get; }
-        ISymbolCollection<ISymbol> Symbols { get; }
+        IObservable<ISymbolCollection<ISymbol>> Symbols { get; }
     }
 }

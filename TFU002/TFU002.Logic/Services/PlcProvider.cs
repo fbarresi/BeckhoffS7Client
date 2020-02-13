@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -50,6 +51,16 @@ namespace TFU002.Logic.Services
         {
             await InitializeAllPlc(settingsProvider.Settings);
             return await base.Initialize();
+        }
+
+        public IPlc GetPlc(string name)
+        {
+            return Plcs.ContainsKey(name) ? Plcs[name] : null;
+        }
+        
+        public IPlc GetPlc()
+        {
+            return Plcs.Any() ? Plcs.First().Value : null;
         }
     }
 }

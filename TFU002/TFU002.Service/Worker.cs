@@ -19,12 +19,14 @@ namespace TFU002.Service
         private readonly ILogger<Worker> logger;
         private readonly ISettingsProvider settingsProvider;
         private readonly IServiceProvider serviceProvider;
+        private readonly IGatewayService gatewayService;
 
-        public Worker(ILogger<Worker> logger, ISettingsProvider settingsProvider, IServiceProvider serviceProvider)
+        public Worker(ILogger<Worker> logger, ISettingsProvider settingsProvider, IServiceProvider serviceProvider, IGatewayService gatewayService)
         {
             this.logger = logger;
             this.settingsProvider = settingsProvider;
             this.serviceProvider = serviceProvider;
+            this.gatewayService = gatewayService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -42,10 +44,11 @@ namespace TFU002.Service
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            await InitializeAllServices(serviceProvider);
-
             //Load Settings and
             //Try Connect with all PLCs
+            await InitializeAllServices(serviceProvider);
+
+            //Start gateway
             
             await base.StartAsync(cancellationToken);
         }

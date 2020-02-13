@@ -77,14 +77,14 @@ namespace TFU002.Logic.Services
             if (state == TwinCAT.ConnectionState.Connected)
             {
                 var loader = SymbolLoaderFactory.Create(Client, new SymbolLoaderSettings(SymbolsLoadMode.Flat));
-                Symbols = loader.Symbols;
+                symbolsSubject.OnNext(loader.Symbols);
             }
             else
             {
-                Symbols = null;
+                symbolsSubject.OnNext(null);
             }
         }
-        
-        public ISymbolCollection<ISymbol> Symbols { get; set; }
+        private Subject<ISymbolCollection<ISymbol>> symbolsSubject = new Subject<ISymbolCollection<ISymbol>>();
+        public IObservable<ISymbolCollection<ISymbol>> Symbols => symbolsSubject.AsObservable();
     }
 }
