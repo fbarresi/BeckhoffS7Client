@@ -49,6 +49,7 @@ namespace TFU002.Service
             await InitializeAllServices(serviceProvider);
 
             //Start gateway
+            await gatewayService.StartGateway();
             
             await base.StartAsync(cancellationToken);
         }
