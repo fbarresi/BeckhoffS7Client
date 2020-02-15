@@ -59,21 +59,13 @@ namespace TFU002.Logic.Services
                 
                 if(gatewayVariable.Direction == Direction.Input)
                 {
-                    plc.CreateNotification<object>(gatewayVariable.S7Address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100)) //todo: fix object
-                        .SelectMany(value => beckhoffService.Client.WriteValueAsync(gatewayVariable.Symbol, value, CancellationToken.None))
-                        .Subscribe()
+                    plc.GetTypedS7Notification(gatewayVariable.TargetType, gatewayVariable.S7Address, beckhoffService.Client, gatewayVariable.Symbol)
                         .AddDisposableTo(subscriptions);
                 }
 
                 if(gatewayVariable.Direction == Direction.Output)
                 {
-                    beckhoffService.Client.WhenNotification<object>(gatewayVariable.Symbol.InstancePath, NotificationSettings.Default) // todo: change this object
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(gatewayVariable.S7Address, value);
-                            return Unit.Default;
-                        })
-                        .Subscribe()
+                    beckhoffService.Client.GetTypedBeckhoffNotification(gatewayVariable.Symbol, gatewayVariable.TargetType, plc, gatewayVariable.S7Address)
                         .AddDisposableTo(subscriptions);
                 }
             }
