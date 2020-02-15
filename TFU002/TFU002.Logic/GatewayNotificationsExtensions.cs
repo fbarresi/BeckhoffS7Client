@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Sharp7.Rx.Enums;
 using Sharp7.Rx.Interfaces;
 using TwinCAT.Ads;
@@ -60,11 +61,7 @@ namespace TFU002.Logic
         {
             if (type == typeof(byte[]))
                 return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, NotificationSettings.Default)
-                    .SelectMany(async value =>
-                    {
-                        await plc.SetValue(address, value);
-                        return Unit.Default;
-                    })
+                    .SelectMany(value => WriteToPlc(plc, address, value))
                     .Subscribe();
 
             var typecode = Type.GetTypeCode(type);
@@ -72,60 +69,42 @@ namespace TFU002.Logic
             {
                 case TypeCode.Boolean:
                     return beckhoff.WhenNotification<bool>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 case TypeCode.Char:
                 case TypeCode.SByte:
                 case TypeCode.Byte:
                     return beckhoff.WhenNotification<byte>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 case TypeCode.Int16:
                 case TypeCode.UInt16:
                     return beckhoff.WhenNotification<short>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 case TypeCode.Int32:
                 case TypeCode.UInt32:
                     return beckhoff.WhenNotification<int>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 case TypeCode.Int64:
                 case TypeCode.UInt64:
                     return beckhoff.WhenNotification<long>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 case TypeCode.Single:
                     return beckhoff.WhenNotification<float>(symbol.InstancePath, NotificationSettings.Default)
-                        .SelectMany(async value =>
-                        {
-                            await plc.SetValue(address, value);
-                            return Unit.Default;
-                        })
+                        .SelectMany(value => WriteToPlc(plc, address, value))
                         .Subscribe();
                 default:
                     throw new ArgumentException($"Unsupported Type {type.Name}");
             }
+        }
+
+        private static async Task<Unit> WriteToPlc<T>(IPlc plc, string address, T value)
+        {
+            await plc.SetValue(address, value);
+            return Unit.Default;
         }
     }
 }
