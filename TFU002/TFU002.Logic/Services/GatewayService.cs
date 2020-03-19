@@ -44,6 +44,7 @@ namespace TFU002.Logic.Services
                 .SelectMany(GetS7Variables)
                 .Select(GenerateObservers)
                 .Do(subscriptionsDisposable => observerSubscriptions.Disposable = subscriptionsDisposable)
+                .LogAndRetryAfterDelay(logger, TimeSpan.FromMilliseconds(100), "Error while generating gateway")
                 .Subscribe()
                 .AddDisposableTo(Disposables);
             return Task.FromResult(Unit.Default);
