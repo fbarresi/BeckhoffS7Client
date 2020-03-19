@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.3">
+  <GVL Name="GVL" Id="{cb2e065a-2489-42d8-9dbd-7260f7cbc0ae}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	
+	{attribute 'S7.Out'}
+	{attribute 'S7.Address' := 'db2.dbx0.0'}
+	imAlive : BOOL;
+	{attribute 'S7.In'}
+	{attribute 'S7.Address' := 'db2.dbx1.0'}
+	otherSystemAlive :BOOL;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -33,7 +33,7 @@ namespace TFU002.Logic.Services
             this.plcProvider = plcProvider;
             this.beckhoffService = beckhoffService;
             
-            observerSubscriptions.Disposable.AddDisposableTo(Disposables);
+            observerSubscriptions.AddDisposableTo(Disposables);
         }
 
         public Task StartGateway()
@@ -98,6 +98,8 @@ namespace TFU002.Logic.Services
             
             if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.Plc", StringComparison.InvariantCultureIgnoreCase)))
                 variable.PlcName = symbol.Attributes.First(attribute => attribute.Name.Equals("S7.Plc", StringComparison.InvariantCultureIgnoreCase)).Value;
+            
+            logger.LogInformation($"Converted Symbol to Gateway {variable}");
             return variable;
         }
     }
@@ -112,6 +114,11 @@ namespace TFU002.Logic.Services
         public bool IsValid => (Direction == Direction.Input || Direction == Direction.Output) 
                                 && TargetType != null
                                 && !string.IsNullOrEmpty(S7Address);
+
+        public override string ToString()
+        {
+            return $"{Symbol.InstancePath} to {Direction} {PlcName}@{S7Address} of Type {TargetType} (isValid = {IsValid})";
+        }
     }
 
     internal enum Direction

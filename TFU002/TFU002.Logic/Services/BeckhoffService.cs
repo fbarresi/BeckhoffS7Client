@@ -10,6 +10,7 @@ using TFU002.Interfaces.Services;
 using TFU002.Logic.Basics;
 using TwinCAT;
 using TwinCAT.Ads;
+using TwinCAT.Ads.Reactive;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.TypeSystem;
 
@@ -20,7 +21,10 @@ namespace TFU002.Logic.Services
         private readonly ILogger<IPlcProvider> logger;
         private readonly ISettingsProvider settingsProvider;
         private readonly BehaviorSubject<ConnectionState> connectionStateSubject = new BehaviorSubject<ConnectionState>(TwinCAT.ConnectionState.Unknown);
+        private readonly BehaviorSubject<AdsState> adsStateSubject = new BehaviorSubject<AdsState>(TwinCAT.Ads.AdsState.Init);
         public IObservable<ConnectionState> ConnectionState => connectionStateSubject.AsObservable();
+        public IObservable<AdsState> AdsState => adsStateSubject.AsObservable();
+
         public BeckhoffService(ILogger<IPlcProvider> logger, ISettingsProvider settingsProvider) : base(logger)
         {
             this.logger = logger;
@@ -59,11 +63,15 @@ namespace TFU002.Logic.Services
                 .Select(pattern => pattern.EventArgs.NewState)
                 .Subscribe(connectionStateSubject.OnNext)
                 .AddDisposableTo(Disposables);
+            
+            Client.WhenAdsStateChanges()
+                .Subscribe(adsStateSubject.OnNext)
+                .AddDisposableTo(Disposables);
 
-            connectionStateSubject
+            adsStateSubject
                 .DistinctUntilChanged()
-                .Do(state => logger.LogDebug($"Beckhoff state changed to '{state}'"))
-                .Where(state => state == TwinCAT.ConnectionState.Connected)
+                .Do(state => logger.LogDebug($"Ads state changed to '{state}'"))
+                .Where(state => state == TwinCAT.Ads.AdsState.Run)
                 .Do(UpdateSymbols)
                 .Subscribe()
                 .AddDisposableTo(Disposables);
@@ -71,20 +79,22 @@ namespace TFU002.Logic.Services
             return await base.Initialize();
         }
         
-        private void UpdateSymbols(ConnectionState state)
+        private void UpdateSymbols(AdsState state)
         {
-            logger.LogDebug("Update beckhoff symbols on beckhoff became connected");
-            if (state == TwinCAT.ConnectionState.Connected)
+            if (state == TwinCAT.Ads.AdsState.Run)
             {
+                logger.LogDebug($"Update symbols on beckhoff change to {state}");
+
                 var loader = SymbolLoaderFactory.Create(Client, new SymbolLoaderSettings(SymbolsLoadMode.Flat));
                 symbolsSubject.OnNext(loader.Symbols);
             }
             else
             {
+                logger.LogDebug($"Deleting symbols on beckhoff state change to {state}");
                 symbolsSubject.OnNext(null);
             }
         }
-        private Subject<ISymbolCollection<ISymbol>> symbolsSubject = new Subject<ISymbolCollection<ISymbol>>();
+        private BehaviorSubject<ISymbolCollection<ISymbol>> symbolsSubject = new BehaviorSubject<ISymbolCollection<ISymbol>>(null);
         public IObservable<ISymbolCollection<ISymbol>> Symbols => symbolsSubject.AsObservable();
     }
 }

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.3">
+  <POU Name="MAIN" Id="{3e163404-f789-4a48-8427-1d9c1477f42e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	onTimer, offTimer : ton;
+	
+	start : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[onTimer(PT:=T#1S, Q=> GVL.imAlive);
+offTimer(IN:= GVl.imAlive, PT:=T#1S);
+IF offTimer.Q THEN
+	onTimer.IN := FALSE;
+END_IF
+IF NOT GVL.imAlive AND NOT onTimer.IN THEN
+	onTimer.IN := TRUE;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="13" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="28" Count="1" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
