@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>dotnet-TFU002.Service-AAB930C3-2D3B-47FA-B429-1FC2A73D5A84</UserSecretsId>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
