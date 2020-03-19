@@ -14,9 +14,9 @@ Scheduled for April 2020
 - .Net Core Runtime 3.1+
 - TwinCAT 3.1.4024.7+
 
-## S7 Attribute
+## The S7 Attribute
 
-Use the simple S7 attribute in order to mark your varible as input or output.
+Use the simple S7 attribute on your primitive variables in order to mark them as input or output.
 
 ```reStructuredText
 VAR_GLOBAL
@@ -27,7 +27,7 @@ VAR_GLOBAL
 
 	{attribute 'S7.In'}
 	{attribute 'S7.Address' := 'db2.dbx1.0'}
-	{attribute 'S7.Plc' := 's7-300'}
+	{attribute 'S7.Plc' := 's7-300'} // you have to select select a plc by name if you have more then one
 	otherSystemAlive :BOOL;
 	
 END_VAR
