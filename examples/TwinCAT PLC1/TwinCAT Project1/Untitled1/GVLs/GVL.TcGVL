@@ -11,6 +11,10 @@ VAR_GLOBAL
 	{attribute 'S7.Address' := 'db2.dbx1.0'}
 	otherSystemAlive :BOOL;
 	
+	{attribute 'S7.Out'}
+	{attribute 'S7.Address' := 'db2.int2'}
+	counter : INT;
+	
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

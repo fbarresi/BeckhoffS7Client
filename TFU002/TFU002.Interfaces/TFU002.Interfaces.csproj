@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="5.0.0-preview4" />
-      <PackageReference Include="Sharp7.Rx" Version="1.0.37" />
+      <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="5.0.0-preview5" />
+      <PackageReference Include="Sharp7.Rx" Version="1.0.44" />
     </ItemGroup>
 
 </Project>

@@ -36,7 +36,6 @@ namespace TFU002.Logic.Services
 
         private void InitializeBeckhoff(BeckhoffSettings setting)
         {
-            logger.LogInformation($"Connecting with Beckhoff at '{setting.AmsNetId}:{setting.Port}'...");
             if (string.IsNullOrEmpty(setting.AmsNetId))
             {
                 Client.Connect(setting.Port); //Connect ads locally
@@ -51,6 +50,8 @@ namespace TFU002.Logic.Services
         {
             try
             {
+                logger.LogInformation($"Connecting with Beckhoff at '{settingsProvider.Settings.BeckhoffSettings.AmsNetId}:{settingsProvider.Settings.BeckhoffSettings.Port}'...");
+
                 InitializeBeckhoff(settingsProvider.Settings.BeckhoffSettings);
             }
             catch (Exception e)
@@ -58,27 +59,45 @@ namespace TFU002.Logic.Services
                 logger.LogError(e, "Error while initializing beckhoff");
             }
             
-            Observable.FromEventPattern<ConnectionStateChangedEventArgs>(ev => Client.ConnectionStateChanged += ev,
-                                                                         ev => Client.ConnectionStateChanged -= ev)
-                .Select(pattern => pattern.EventArgs.NewState)
-                .Subscribe(connectionStateSubject.OnNext)
+            Observable.Interval(TimeSpan.FromMilliseconds(100))
+                .Do(_ => CheckConnectionHealth())
+                .Subscribe()
                 .AddDisposableTo(Disposables);
             
-            Client.WhenAdsStateChanges()
-                .Subscribe(adsStateSubject.OnNext)
+            connectionStateSubject
+                .DistinctUntilChanged()
+                .Do(state => logger.LogDebug($"Connection state changed to '{state}'"))
+                .Subscribe()
                 .AddDisposableTo(Disposables);
-
+            
             adsStateSubject
                 .DistinctUntilChanged()
                 .Do(state => logger.LogDebug($"Ads state changed to '{state}'"))
-                .Where(state => state == TwinCAT.Ads.AdsState.Run)
                 .Do(UpdateSymbols)
                 .Subscribe()
                 .AddDisposableTo(Disposables);
             
             return await base.Initialize();
         }
-        
+
+        private void CheckConnectionHealth()
+        {
+            try
+            {
+                if(!Client.IsConnected)
+                    InitializeBeckhoff(settingsProvider.Settings.BeckhoffSettings);
+                var state = Client.ReadState();
+                connectionStateSubject.OnNext(TwinCAT.ConnectionState.Connected);
+                adsStateSubject.OnNext(state.AdsState);
+            }
+            catch (Exception)
+            {
+                connectionStateSubject.OnNext(TwinCAT.ConnectionState.Lost);
+                adsStateSubject.OnNext(TwinCAT.Ads.AdsState.Invalid);
+                Client.Disconnect();
+            }
+        }
+
         private void UpdateSymbols(AdsState state)
         {
             if (state == TwinCAT.Ads.AdsState.Run)

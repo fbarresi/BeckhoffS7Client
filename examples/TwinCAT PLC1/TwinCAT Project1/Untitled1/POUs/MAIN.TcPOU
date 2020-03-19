@@ -16,6 +16,7 @@ IF offTimer.Q THEN
 END_IF
 IF NOT GVL.imAlive AND NOT onTimer.IN THEN
 	onTimer.IN := TRUE;
+	GVL.counter := GVL.counter +1;
 END_IF
 
 ]]></ST>
@@ -26,6 +27,7 @@ END_IF
       <LineId Id="17" Count="0" />
       <LineId Id="28" Count="1" />
       <LineId Id="19" Count="1" />
+      <LineId Id="36" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="11" Count="0" />
