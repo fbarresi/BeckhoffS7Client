@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using TFU002.Interfaces.Services;
+using TFU002.Logic;
 using TFU002.Logic.Services;
 
 namespace TFU002.Service
@@ -18,7 +20,10 @@ namespace TFU002.Service
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
-                .WriteTo.File("Service.log", rollOnFileSizeLimit: true, retainedFileCountLimit: 10, fileSizeLimitBytes: 102400)
+                .WriteTo.File( Path.Combine(Directory.Exists(Constants.DefaultDirectory) ? Constants.DefaultDirectory : "", "Service.log"), 
+                    rollOnFileSizeLimit: true, 
+                    retainedFileCountLimit: 10, 
+                    fileSizeLimitBytes: 102400)
                 .CreateLogger();
             
             CreateHostBuilder(args).Build().Run();

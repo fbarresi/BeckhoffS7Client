@@ -21,6 +21,6 @@ namespace TFU002.Logic.Services
         }
 
         public string AssemblyDirectory { get; }
-        public string DefaultPath => @"C:\TwinCAT\Functions\Unofficial\BeckhoffS7Client";
+        public string DefaultPath => Constants.DefaultDirectory;
     }
 }
