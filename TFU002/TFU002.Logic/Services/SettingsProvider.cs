@@ -17,7 +17,7 @@ namespace TFU002.Logic.Services
         public ApplicationSettings Settings { get; private set; }
         private void LoadOrCreateSettings()
         {
-            var settingsPath = Path.Combine(directoryProvider.AssemblyDirectory, "TFU002.settings.json");
+            var settingsPath = Path.Combine(directoryProvider.DefaultPath, "TFU002.settings.json");
             logger.LogInformation($"Looking for application settings into {settingsPath}");
             try
             {
@@ -28,11 +28,26 @@ namespace TFU002.Logic.Services
                 }
                 else
                 {
-                    logger.LogInformation("Application settings does'n not exist: creating new default settings");
-                    Settings = new ApplicationSettings();
-                    Settings.ExtenalPlcSettings.Add(new ExtenalPlcSetting());
-                    var json = JsonConvert.SerializeObject(Settings, Formatting.Indented);
-                    File.WriteAllText(settingsPath, json);
+                    logger.LogInformation("Application settings do not exist...");
+                    var fallbackSettingsPath = Path.Combine(directoryProvider.AssemblyDirectory, "TFU002.settings.json");
+                    logger.LogInformation($"looking for settings into {fallbackSettingsPath}...");
+                    if (File.Exists(fallbackSettingsPath))
+                    {
+                        Settings = JsonConvert.DeserializeObject<ApplicationSettings>(File.ReadAllText(fallbackSettingsPath));
+                        logger.LogInformation("Application settings successfully loaded!");
+                    }
+                    else
+                    {
+                        logger.LogInformation("Application settings not found also in fallback path...");
+                        Settings = new ApplicationSettings();
+                        Settings.ExtenalPlcSettings.Add(new ExtenalPlcSetting());
+                        var json = JsonConvert.SerializeObject(Settings, Formatting.Indented);
+                        if (Directory.Exists(directoryProvider.DefaultPath))
+                        {
+                            logger.LogInformation($"Writing default settings into {settingsPath}");
+                            File.WriteAllText(settingsPath, json);
+                        }
+                    }
                 }
             }
             catch (Exception e)
