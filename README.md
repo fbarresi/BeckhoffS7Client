@@ -11,7 +11,6 @@ Scheduled for April 2020
 
 ## Requirements
 
-- .Net Core Runtime 3.1+
 - TwinCAT 3.1.4024.7+
 
 ## The S7 Attribute
