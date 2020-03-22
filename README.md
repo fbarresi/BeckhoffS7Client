@@ -104,7 +104,7 @@ Don't forget to **star this project**!
 
 ## Credits
 
-Special thanks to [JetBrains](https://www.jetbrains.com/?from=BeckhoffHttpClient) for supporting this open source project.
+Special thanks to [JetBrains](https://www.jetbrains.com/?from=BeckhoffS7Client) for supporting this open source project.
 
 <a href="https://www.jetbrains.com/?from=BeckhoffS7Client"><img height="200" src="https://www.jetbrains.com/company/brand/img/jetbrains_logo.png"></a>
 
