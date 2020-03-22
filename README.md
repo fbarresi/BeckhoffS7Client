@@ -13,7 +13,7 @@ This software is an (unofficial) opensource implementation of [TF6610 | TC3 S5/S
 
 Your surely gonna love this software, but if you still need a couple of information for starring this project...
 
-- **FREE! (for commercial use aswell)**
+- **FREE! (for commercial use as well)**
 - Resilient: doesn't matter what you do with the beckhoff (Start, Stop, Config-Mode, Run-Mode, etc.)
 - Modern: build with the newest TwinCAT Version and .Net Core 3.1
 - Clever: don't need to specify any datatype or bit numbering
@@ -26,9 +26,8 @@ Your surely gonna love this software, but if you still need a couple of informat
 
 ### Install and setup connections
 
-- Install the service on your beckhoff and ajdust the settings file `TFU002.settings.json` located `C:\TwinCAT\Functions\Unofficial\BeckhoffS7Client`
-
-- Put your connection parameters for all your S7 PLC in the settings file. 
+- [Download](https://github.com/fbarresi/BeckhoffS7Client/releases/latest) the setup and install it on your beckhoff.
+- Ajdust the settings file `TFU002.settings.json` located `C:\TwinCAT\Functions\Unofficial\BeckhoffS7Client` putting your connection parameters for all your S7 PLC in the settings file. 
 
 ```json
 {
