@@ -19,18 +19,31 @@ namespace TFU002.Interfaces.Extensions
 
 		public static IObservable<T> RetryAfterDelay<T>(
 			this IObservable<T> source,
+			TimeSpan retryDelay)
+		{
+			return RedoAfterDelay(source, retryDelay, -1, null, Observable.Retry, Observable.Retry);
+		}
+		
+		public static IObservable<T> RetryAfterDelay<T>(
+			this IObservable<T> source,
 			TimeSpan retryDelay,
-			int retryCount = -1,
-			IScheduler scheduler = null)
+			int retryCount,
+			IScheduler scheduler)
 		{
 			return RedoAfterDelay(source, retryDelay, retryCount, scheduler, Observable.Retry, Observable.Retry);
 		}
 
 		public static IObservable<T> RepeatAfterDelay<T>(
 			this IObservable<T> source,
+			TimeSpan retryDelay)
+		{
+			return RedoAfterDelay(source, retryDelay, -1, null, Observable.Repeat, Observable.Repeat);
+		}
+		public static IObservable<T> RepeatAfterDelay<T>(
+			this IObservable<T> source,
 			TimeSpan retryDelay,
-			int repeatCount = -1,
-			IScheduler scheduler = null)
+			int repeatCount,
+			IScheduler scheduler)
 		{
 			return RedoAfterDelay(source, retryDelay, repeatCount, scheduler, Observable.Repeat, Observable.Repeat);
 		}
@@ -39,9 +52,17 @@ namespace TFU002.Interfaces.Extensions
 			this IObservable<T> source,
 			ILogger logger,
 			TimeSpan retryDelay,
+			string message)
+		{
+			return LogAndRetryAfterDelay(source, logger, retryDelay, message, -1, null);
+		}
+		public static IObservable<T> LogAndRetryAfterDelay<T>(
+			this IObservable<T> source,
+			ILogger logger,
+			TimeSpan retryDelay,
 			string message,
-			int retryCount = -1,
-			IScheduler scheduler = null)
+			int retryCount,
+			IScheduler scheduler)
 		{
 			var sourceLogged =
 				source
