@@ -3,6 +3,5 @@
     public interface IDirectoryProvider
     {
         string AssemblyDirectory { get; }
-        string DefaultPath { get; }
     }
 }

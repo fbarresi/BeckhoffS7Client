@@ -17,7 +17,7 @@ namespace TFU002.Logic.Services
         public ApplicationSettings Settings { get; private set; }
         private void LoadOrCreateSettings()
         {
-            var settingsPath = Path.Combine(directoryProvider.DefaultPath, "TFU002.settings.json");
+            var settingsPath = Path.Combine(Constants.DefaultDirectory, "TFU002.settings.json");
             logger.LogInformation($"Looking for application settings into {settingsPath}");
             try
             {
@@ -42,7 +42,7 @@ namespace TFU002.Logic.Services
                         Settings = new ApplicationSettings();
                         Settings.ExtenalPlcSettings.Add(new ExtenalPlcSetting());
                         var json = JsonConvert.SerializeObject(Settings, Formatting.Indented);
-                        if (Directory.Exists(directoryProvider.DefaultPath))
+                        if (Directory.Exists(Constants.DefaultDirectory))
                         {
                             logger.LogInformation($"Writing default settings into {settingsPath}");
                             File.WriteAllText(settingsPath, json);

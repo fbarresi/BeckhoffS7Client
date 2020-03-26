@@ -63,9 +63,11 @@ namespace TFU002.Logic
         public static IDisposable GetTypedBeckhoffNotification(this AdsClient beckhoff, ISymbol symbol, Type type, IPlc plc, string address)
         {
             if (type == typeof(byte[]))
+            {
                 return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, NotificationSettings.Default)
                     .SelectMany(value => plc.Write(address, value))
                     .Subscribe();
+            }
 
             var typecode = Type.GetTypeCode(type);
             switch (typecode)

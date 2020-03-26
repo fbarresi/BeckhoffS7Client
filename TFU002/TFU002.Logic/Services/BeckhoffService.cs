@@ -84,8 +84,10 @@ namespace TFU002.Logic.Services
         {
             try
             {
-                if(!Client.IsConnected)
+                if (!Client.IsConnected)
+                {
                     InitializeBeckhoff(settingsProvider.Settings.BeckhoffSettings);
+                }
                 var state = Client.ReadState();
                 connectionStateSubject.OnNext(TwinCAT.ConnectionState.Connected);
                 adsStateSubject.OnNext(state.AdsState);
@@ -113,7 +115,7 @@ namespace TFU002.Logic.Services
                 symbolsSubject.OnNext(null);
             }
         }
-        private BehaviorSubject<ISymbolCollection<ISymbol>> symbolsSubject = new BehaviorSubject<ISymbolCollection<ISymbol>>(null);
+        private readonly BehaviorSubject<ISymbolCollection<ISymbol>> symbolsSubject = new BehaviorSubject<ISymbolCollection<ISymbol>>(null);
         public IObservable<ISymbolCollection<ISymbol>> Symbols => symbolsSubject.AsObservable();
     }
 }

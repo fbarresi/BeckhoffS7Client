@@ -42,14 +42,14 @@ namespace TFU002.Logic.Services
         {
             foreach (var plcSetting in settings.ExtenalPlcSettings)
             {
-                Plcs[plcSetting.Name] = await InitializePlc(plcSetting);
+                Plcs[plcSetting.Name] = await InitializePlc(plcSetting).ConfigureAwait(false);
                 Disposables.Add(Plcs[plcSetting.Name]);
             }
         }
 
         public override async Task<bool> Initialize()
         {
-            await InitializeAllPlc(settingsProvider.Settings);
+            await InitializeAllPlc(settingsProvider.Settings).ConfigureAwait(false);
             return await base.Initialize();
         }
 

@@ -17,14 +17,12 @@ namespace TFU002.Service
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> logger;
-        private readonly ISettingsProvider settingsProvider;
         private readonly IServiceProvider serviceProvider;
         private readonly IGatewayService gatewayService;
 
-        public Worker(ILogger<Worker> logger, ISettingsProvider settingsProvider, IServiceProvider serviceProvider, IGatewayService gatewayService)
+        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider, IGatewayService gatewayService)
         {
             this.logger = logger;
-            this.settingsProvider = settingsProvider;
             this.serviceProvider = serviceProvider;
             this.gatewayService = gatewayService;
         }
@@ -33,12 +31,12 @@ namespace TFU002.Service
         {
             //Observe Beckhoff for run mode
             // // Read symbols attributes
-            // // Create a subsriprion for evcery attribute Beckhoff => S7 and S7 => Beckhoff
+            // // Create a subscription for every attribute Beckhoff => S7 and S7 => Beckhoff
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 //logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(1000, stoppingToken).ConfigureAwait(false);
             }
         }
 
@@ -46,7 +44,7 @@ namespace TFU002.Service
         {
             //Load Settings and
             //Try Connect with all PLCs
-            await InitializeAllServices(serviceProvider);
+            await InitializeAllServices(serviceProvider).ConfigureAwait(false);
 
             //Start gateway
             await gatewayService.StartGateway();

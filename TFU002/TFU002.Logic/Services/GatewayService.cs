@@ -88,17 +88,25 @@ namespace TFU002.Logic.Services
                 Symbol = symbol,
                 TargetType = symbol.IsPrimitiveType ? ((DataType)symbol.DataType).ManagedType : null
             };
-            if(symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.In", StringComparison.InvariantCultureIgnoreCase))) 
+            if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.In", StringComparison.InvariantCultureIgnoreCase)))
+            {
                 variable.Direction = Direction.Input;
-            
-            if(symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.Out", StringComparison.InvariantCultureIgnoreCase))) 
+            }
+
+            if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.Out", StringComparison.InvariantCultureIgnoreCase)))
+            {
                 variable.Direction = Direction.Output;
-            
+            }
+
             if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.Address", StringComparison.InvariantCultureIgnoreCase)))
+            {
                 variable.S7Address = symbol.Attributes.First(attribute => attribute.Name.Equals("S7.Address", StringComparison.InvariantCultureIgnoreCase)).Value;
-            
+            }
+
             if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.Plc", StringComparison.InvariantCultureIgnoreCase)))
+            {
                 variable.PlcName = symbol.Attributes.First(attribute => attribute.Name.Equals("S7.Plc", StringComparison.InvariantCultureIgnoreCase)).Value;
+            }
             
             logger.LogInformation($"Converted Symbol to Gateway {variable}");
             return variable;
