@@ -1,6 +1,7 @@
 # BeckhoffS7Client
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7qbba540vvgwj09a?svg=true)](https://ci.appveyor.com/project/fbarresi/beckhoffs7client)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ce6d11762b254b939d76425339a4563b)](https://www.codacy.com/manual/fbarresi/BeckhoffS7Client?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fbarresi/BeckhoffS7Client&amp;utm_campaign=Badge_Grade)
 ![Licence](https://img.shields.io/github/license/fbarresi/BeckhoffS7Client.svg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/fbarresi/BeckhoffS7Client/total)
 
