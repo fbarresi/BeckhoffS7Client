@@ -3,11 +3,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Sharp7.Rx.Enums;
 using Sharp7.Rx.Interfaces;
-using TFU002.Interfaces.Extensions;
 using TwinCAT.Ads;
 using TwinCAT.Ads.Reactive;
 using TwinCAT.TypeSystem;
@@ -19,9 +17,11 @@ namespace TFU002.Logic
         public static IDisposable GetTypedS7Notification(this IPlc plc, Type type, string address, AdsClient beckhoff, ISymbol symbol)
         {
             if (type == typeof(byte[]))
+            {
                 return plc.CreateNotification<byte[]>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
                     .SelectMany(value => beckhoff.Write(symbol, value))
                     .Subscribe();
+            }
 
             var typecode = Type.GetTypeCode(type);
             switch (typecode)

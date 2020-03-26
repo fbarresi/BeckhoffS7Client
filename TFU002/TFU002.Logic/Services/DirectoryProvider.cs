@@ -9,15 +9,13 @@ namespace TFU002.Logic.Services
 {
     public class DirectoryProvider : IDirectoryProvider
     {
-        private readonly ILogger<DirectoryProvider> logger;
 
         public DirectoryProvider(ILogger<DirectoryProvider> logger)
         {
-            this.logger = logger;
             var assemblyLocation = Assembly.GetAssembly(this.GetType()).Location;
             var currentDirectory = Directory.GetParent(assemblyLocation);
             AssemblyDirectory = currentDirectory.FullName;
-            logger.LogInformation($"Actual path: {currentDirectory}");
+            logger.LogDebug($"Actual path: {currentDirectory}");
         }
 
         public string AssemblyDirectory { get; }

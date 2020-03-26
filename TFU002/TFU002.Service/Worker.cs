@@ -35,7 +35,6 @@ namespace TFU002.Service
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                //logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken).ConfigureAwait(false);
             }
         }
@@ -81,7 +80,7 @@ namespace TFU002.Service
             }
         }
 
-        public Type[] GetExtendedInterfacesOf<T>(params Type[] exclude)
+        public static Type[] GetExtendedInterfacesOf<T>(params Type[] exclude)
         {
             return AppDomain.CurrentDomain
                 .GetAssemblies()
