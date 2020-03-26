@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ae7c3fe5-1377-4f04-bf4b-ee01b8265744</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>TFU002.Setup</OutputName>
+    <OutputName>TFU002_BeckhoffS7Client</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
