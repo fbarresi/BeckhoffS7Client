@@ -59,7 +59,7 @@ namespace TFU002.Logic.Services
                 logger.LogError(e, "Error while initializing beckhoff");
             }
             
-            Observable.Interval(TimeSpan.FromMilliseconds(100))
+            Observable.Interval(TimeSpan.FromSeconds(1))
                 .Do(_ => CheckConnectionHealth())
                 .Subscribe()
                 .AddDisposableTo(Disposables);
