@@ -88,6 +88,12 @@ namespace TFU002.Logic.Services
                 Symbol = symbol,
                 TargetType = symbol.IsPrimitiveType ? ((DataType)symbol.DataType).ManagedType : null
             };
+            
+            if (((DataType) symbol.DataType).ManagedType == typeof(byte[]))
+            {
+                variable.TargetType = typeof(byte[]);
+            }
+            
             if (symbol.Attributes.Any(attribute => attribute.Name.Equals("S7.In", StringComparison.InvariantCultureIgnoreCase)))
             {
                 variable.Direction = Direction.Input;
