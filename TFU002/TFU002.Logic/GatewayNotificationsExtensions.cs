@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Serilog;
 using Sharp7.Rx.Enums;
 using Sharp7.Rx.Interfaces;
+using TFU002.Interfaces.Extensions;
 using TwinCAT.Ads;
 using TwinCAT.Ads.Reactive;
 using TwinCAT.TypeSystem;
@@ -66,9 +67,11 @@ namespace TFU002.Logic
         {
             if (type == typeof(byte[]))
             {
-                return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, new NotificationSettings(AdsTransMode.Cyclic, 1000, 1000) )
+                return Observable.Timer(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1))
+                    .Select(_ => beckhoff.ReadVariable<byte[]>(symbol))
                     .Do(value => Log.Logger.Debug($"Writing {symbol.InstancePath} to {address}: {ByteToString(value)}"))
                     .SelectMany(value => plc.Write(address, value))
+                    .Retry()
                     .Subscribe();
             }
 
@@ -138,6 +141,19 @@ namespace TFU002.Logic
                 Log.Logger.Error(e, $"Error while writing plc value {value} into {address}");
             }
             return Unit.Default;
+        }
+
+        private static T ReadVariable<T>(this AdsClient beckhoff, ISymbol symbol)
+        {
+            try
+            {
+                return (T) beckhoff.ReadValue(symbol);
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, $"Error while reading symbol {symbol.InstancePath}");
+                throw;
+            }
         }
     }
 }
