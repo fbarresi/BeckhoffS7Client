@@ -18,7 +18,7 @@ namespace TFU002.Logic
         {
             if (type == typeof(byte[]))
             {
-                return plc.CreateNotification<byte[]>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                return plc.CreateNotification<byte[]>(address, TransmissionMode.Cyclic, TimeSpan.FromMilliseconds(1000))
                     .SelectMany(value => beckhoff.Write(symbol, value))
                     .Subscribe();
             }
