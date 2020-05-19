@@ -64,7 +64,7 @@ namespace TFU002.Logic
         {
             if (type == typeof(byte[]))
             {
-                return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, NotificationSettings.Default)
+                return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, new NotificationSettings(AdsTransMode.Cyclic, 1000, 1000) )
                     .SelectMany(value => plc.Write(address, value))
                     .Subscribe();
             }
