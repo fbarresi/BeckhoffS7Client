@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace TFU002.Logic
             if (type == typeof(byte[]))
             {
                 return plc.CreateNotification<byte[]>(address, TransmissionMode.Cyclic, TimeSpan.FromMilliseconds(1000))
+                    .Do(value => Log.Logger.Debug($"Writing {address} to {symbol.InstancePath} {ByteToString(value)}"))
                     .SelectMany(value => beckhoff.Write(symbol, value))
                     .Subscribe();
             }
@@ -65,6 +67,7 @@ namespace TFU002.Logic
             if (type == typeof(byte[]))
             {
                 return beckhoff.WhenNotification<byte[]>(symbol.InstancePath, new NotificationSettings(AdsTransMode.Cyclic, 1000, 1000) )
+                    .Do(value => Log.Logger.Debug($"Writing {symbol.InstancePath} to {address}: {ByteToString(value)}"))
                     .SelectMany(value => plc.Write(address, value))
                     .Subscribe();
             }
@@ -104,6 +107,11 @@ namespace TFU002.Logic
                 default:
                     throw new ArgumentException($"Unsupported Type {type.Name}");
             }
+        }
+
+        private static string ByteToString(byte[] value)
+        {
+            return string.Join(" ", value.Select(b => b.ToString("X2")));
         }
 
         private static async Task<Unit> Write<T>(this AdsClient beckhoff, ISymbol symbol, T value)
