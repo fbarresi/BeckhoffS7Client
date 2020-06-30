@@ -16,11 +16,11 @@ namespace TFU002.Logic
 {
     public static class GatewayNotificationsExtensions
     {
-        public static IDisposable GetTypedS7Notification(this IPlc plc, Type type, string address, AdsClient beckhoff, ISymbol symbol)
+        public static IDisposable GetTypedS7Notification(this IPlc plc, Type type, string address, AdsClient beckhoff, ISymbol symbol, TimeSpan notificationCycle, TimeSpan regularTransmissionCycle)
         {
             if (type == typeof(byte[]))
             {
-                return plc.CreateNotification<byte[]>(address, TransmissionMode.Cyclic, TimeSpan.FromMilliseconds(1000))
+                return plc.CreateNotification<byte[]>(address, TransmissionMode.Cyclic, regularTransmissionCycle)
                     .Do(value => Log.Logger.Debug($"Writing {address} to {symbol.InstancePath} {ByteToString(value)}"))
                     .SelectMany(value => beckhoff.Write(symbol, value))
                     .Subscribe();
@@ -30,32 +30,32 @@ namespace TFU002.Logic
             switch (typecode)
             {
                 case TypeCode.Boolean:
-                    return plc.CreateNotification<bool>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<bool>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 case TypeCode.SByte:
                 case TypeCode.Byte:
                 case TypeCode.Char:
-                    return plc.CreateNotification<byte>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<byte>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 case TypeCode.Int16:
                 case TypeCode.UInt16:
-                    return plc.CreateNotification<short>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<short>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 case TypeCode.Int32:
                 case TypeCode.UInt32:
-                    return plc.CreateNotification<int>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<int>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 case TypeCode.Int64:
                 case TypeCode.UInt64:
-                    return plc.CreateNotification<long>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<long>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 case TypeCode.Single:
-                    return plc.CreateNotification<float>(address, TransmissionMode.OnChange, TimeSpan.FromMilliseconds(100))
+                    return plc.CreateNotification<float>(address, TransmissionMode.OnChange, notificationCycle)
                         .SelectMany(value => beckhoff.Write(symbol, value))
                         .Subscribe();
                 default:
@@ -63,11 +63,11 @@ namespace TFU002.Logic
             }
         }
 
-        public static IDisposable GetTypedBeckhoffNotification(this AdsClient beckhoff, ISymbol symbol, Type type, IPlc plc, string address)
+        public static IDisposable GetTypedBeckhoffNotification(this AdsClient beckhoff, ISymbol symbol, Type type, IPlc plc, string address, TimeSpan regularTransmissionCycle)
         {
             if (type == typeof(byte[]))
             {
-                return Observable.Timer(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1))
+                return Observable.Timer(TimeSpan.FromMilliseconds(100), regularTransmissionCycle)
                     .Select(_ => beckhoff.ReadVariable<byte[]>(symbol))
                     .Do(value => Log.Logger.Debug($"Writing {symbol.InstancePath} to {address}: {ByteToString(value)}"))
                     .SelectMany(value => plc.Write(address, value))

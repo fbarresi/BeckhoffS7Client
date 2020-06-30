@@ -11,5 +11,7 @@ namespace TFU002.Interfaces.Services
         IObservable<AdsState> AdsState { get; }
         AdsClient Client { get; }
         IObservable<ISymbolCollection<ISymbol>> Symbols { get; }
+        public TimeSpan NotificationCycleTime { get; }
+        public TimeSpan IntervalTransmissionCycleTime { get; }
     }
 }

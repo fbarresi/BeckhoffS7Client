@@ -60,13 +60,22 @@ namespace TFU002.Logic.Services
                 
                 if(gatewayVariable.Direction == Direction.Input)
                 {
-                    plc.GetTypedS7Notification(gatewayVariable.TargetType, gatewayVariable.S7Address, beckhoffService.Client, gatewayVariable.Symbol)
+                    plc.GetTypedS7Notification(gatewayVariable.TargetType, 
+                            gatewayVariable.S7Address, 
+                            beckhoffService.Client, 
+                            gatewayVariable.Symbol,
+                            beckhoffService.NotificationCycleTime,
+                            beckhoffService.IntervalTransmissionCycleTime)
                         .AddDisposableTo(subscriptions);
                 }
 
                 if(gatewayVariable.Direction == Direction.Output)
                 {
-                    beckhoffService.Client.GetTypedBeckhoffNotification(gatewayVariable.Symbol, gatewayVariable.TargetType, plc, gatewayVariable.S7Address)
+                    beckhoffService.Client.GetTypedBeckhoffNotification(gatewayVariable.Symbol, 
+                            gatewayVariable.TargetType, 
+                            plc, 
+                            gatewayVariable.S7Address,
+                            beckhoffService.IntervalTransmissionCycleTime)
                         .AddDisposableTo(subscriptions);
                 }
             }

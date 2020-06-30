@@ -117,5 +117,7 @@ namespace TFU002.Logic.Services
         }
         private readonly BehaviorSubject<ISymbolCollection<ISymbol>> symbolsSubject = new BehaviorSubject<ISymbolCollection<ISymbol>>(null);
         public IObservable<ISymbolCollection<ISymbol>> Symbols => symbolsSubject.AsObservable();
+        public TimeSpan NotificationCycleTime => settingsProvider.Settings.NotificationCycleTime.AtLeast(TimeSpan.FromMilliseconds(100));
+        public TimeSpan IntervalTransmissionCycleTime => settingsProvider.Settings.IntervalTransmissionCycleTime.AtLeast(TimeSpan.FromMilliseconds(100));
     }
 }
