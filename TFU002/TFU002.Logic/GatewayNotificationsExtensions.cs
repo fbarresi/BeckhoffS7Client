@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Serilog;
 using Sharp7.Rx.Enums;
 using Sharp7.Rx.Interfaces;
-using TFU002.Interfaces.Extensions;
 using TwinCAT.Ads;
 using TwinCAT.Ads.Reactive;
 using TwinCAT.TypeSystem;
