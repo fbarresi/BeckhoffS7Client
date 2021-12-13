@@ -20,7 +20,7 @@ namespace TFU002.Logic.Services
     {
         private readonly ILogger<IPlcProvider> logger;
         private readonly ISettingsProvider settingsProvider;
-        private readonly BehaviorSubject<ConnectionState> connectionStateSubject = new BehaviorSubject<ConnectionState>(TwinCAT.ConnectionState.Unknown);
+        private readonly BehaviorSubject<ConnectionState> connectionStateSubject = new BehaviorSubject<ConnectionState>(TwinCAT.ConnectionState.None);
         private readonly BehaviorSubject<AdsState> adsStateSubject = new BehaviorSubject<AdsState>(TwinCAT.Ads.AdsState.Init);
         public IObservable<ConnectionState> ConnectionState => connectionStateSubject.AsObservable();
         public IObservable<AdsState> AdsState => adsStateSubject.AsObservable();
