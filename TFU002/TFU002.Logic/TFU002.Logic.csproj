@@ -5,12 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="5.0.492" />
         <PackageReference Include="Beckhoff.TwinCAT.Ads.Reactive" Version="5.0.492" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Serilog" Version="2.10.0" />
-        <PackageReference Include="Sharp7" Version="1.1.79" />
-        <PackageReference Include="Sharp7.Rx" Version="1.0.44" />
     </ItemGroup>
 
     <ItemGroup>
